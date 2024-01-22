@@ -12,7 +12,9 @@ var static = "static";
 var root = __dirname + sep + static;
 
 var http_server = function (req, res) {
-    var pathname = url.parse(req.url).pathname;
+    //var pathname = url.parse(req.url).pathname;
+    var pathname = url.parse(req.url, true).pathname;
+    console.log('pathname', pathname);
     if (pathname == "/test.json") {
         var obj = { code: 200, msg: "ok" };
         res.writeHead(200, {
@@ -100,6 +102,14 @@ var http_server = function (req, res) {
                 case ".png":
                     res.writeHead(200, {
                         "Content-Type": "image/png",
+                        "Cache-Control": "no-store, no-cache, must-revalidate",
+                        Pragma: "no-cache",
+                        "Content-Length": stat.size, // 添加 Content-Length 头
+                    });
+                    break;
+                case ".xml":
+                    res.writeHead(200, {
+                        "Content-Type": "application/xml; charset=utf-8",
                         "Cache-Control": "no-store, no-cache, must-revalidate",
                         Pragma: "no-cache",
                         "Content-Length": stat.size, // 添加 Content-Length 头
